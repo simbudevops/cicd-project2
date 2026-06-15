@@ -141,6 +141,31 @@ echo "=========================================="
 
 step4:
 
+---
+- hosts: ansible
+
+  tasks:
+  - name: clone repository
+    git:
+      repo: https://github.com/simbudevops/cicd-project2.git
+      dest: /opt/docker/cafe-app
+      clone: yes
+      update: yes
+
+  - name: create docker image
+    command: docker build -t cafe-app:latest /opt/docker/cafe-app
+    args:
+     chdir: /opt/docker/
+
+  - name: create tag to push image onto dockerhub
+    command: docker tag cafe-app:latest simbudevops/cicd-project2:latest
+
+  - name: push docker image
+    command: docker push simbudevops/cicd-project2:latest
+
+
+=======================================================================================
+
 ###kubectl, AWS CLI and eksctl###
 
 #!/bin/bash
