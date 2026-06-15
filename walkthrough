@@ -175,5 +175,13 @@ eksctl delete cluster --name simbu-cluster --region ap-south-1
 aws eks update-kubeconfig --region ap-south-1 --name simbu-cluster
 
 
+eksctl create cluster \
+  --name simbu-cluster \
+  --region ap-south-1 \
+  --node-type c7i-flex.large \
+  --nodes 2 \
+  --ssh-access \
+  --ssh-public-key simbu-key
+
 #####################################################################################################################################################
 
