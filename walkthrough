@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# 1. Install kubectl
+sudo apt update
+sudo apt install curl -y
+curl -LO https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+kubectl version --client
+
+# 2. Install AWS CLI
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+sudo apt install unzip -y
+unzip awscliv2.zip
+sudo ./aws/install
+aws --version
+
+# 3. Install eksctl
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /bin
+eksctl version	
+
+
+eksctl create cluster --name simbu-cluster  --region ap-south-1 --node-type t3.micro --nodes 3 
+
+eksctl delete cluster --name simbu-cluster  --region ap-south-1 
+
+eksctl create cluster --name simbu-cluster --region ap-south-1 --node-type c7i-flex.large --nodes 2
+eksctl delete cluster --name simbu-cluster --region ap-south-1
+
+aws eks update-kubeconfig --region ap-south-1 --name simbu-cluster
